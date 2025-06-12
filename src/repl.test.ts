@@ -7,11 +7,11 @@ describe.each([
     expected: ["hello", "world"],
   },
   {
-    input: "  hello",
+    input: "  Hello",
     expected: ["hello"],
   },
   {
-    input: "  three's a    party   ",
+    input: "  THREE's a    party   ",
     expected: ["three's", "a", "party"],
   },
 ])("cleanInput($input)", ({ input, expected }) => {
