@@ -1,4 +1,6 @@
-import { createInterface } from 'node:readline';
+import { createInterface } from 'readline';
+import { getCommands } from './commands.js';
+import { initState } from './state.js';
 
 export function cleanInput(input: string): string[] {
   const out = []
@@ -10,20 +12,21 @@ export function cleanInput(input: string): string[] {
 }
 
 export function startREPL(): void {
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: 'Pokedex > ',
-  });
-  rl.prompt()
-  rl.on("line", (input) => {
+  const state = initState()
+  state.rl.prompt()
+  state.rl.on("line", (input) => {
     const words = cleanInput(input)
     if (words.length === 0) {
-      rl.prompt()
+      state.rl.prompt()
       return
     }
-    console.log(`Your command was: ${words[0]}`)
-    rl.prompt()
+    if (!(words[0] in state.commands)) {
+      console.log("Unknown command")
+      state.rl.prompt()
+      return
+    }
+    state.commands[words[0]].callback(state)
+    state.rl.prompt()
   })
-
 }
+
