@@ -23,7 +23,7 @@ export function initState(): State {
     prompt: 'Pokedex > ',
   });
   const commands = getCommands()
-  const api = new PokeAPI
+  const api = new PokeAPI()
   return {
     rl,
     commands,
