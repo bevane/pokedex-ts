@@ -27,8 +27,6 @@ export class Cache {
   }
 
   #reap() {
-    console.log('reaping')
-    console.log(this.#cache)
     for (const [key, entry] of this.#cache) {
       if (!entry) {
         continue

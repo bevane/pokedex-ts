@@ -10,7 +10,7 @@ export class PokeAPI {
 
   async fetchLocations(pageURL?: string): Promise<ShallowLocations> {
     const fullURL = pageURL ? pageURL : PokeAPI.baseURL + "/location-area?offset=0&limit=20"
-    let data
+    let data: ShallowLocations
     const cachedResp = this.#cache.get<ShallowLocations>(fullURL)
     if (cachedResp) {
       data = cachedResp
@@ -24,8 +24,19 @@ export class PokeAPI {
 
   async fetchLocation(locationName: string): Promise<Location> {
     const fullURL = PokeAPI.baseURL + "/location-area/" + locationName
-    const resp = await fetch(fullURL)
-    return (await resp.json()) as Location
+    let data: Location
+    const cachedResp = this.#cache.get<Location>(fullURL)
+    if (cachedResp) {
+      data = cachedResp
+    } else {
+      const resp = await fetch(fullURL)
+      if (resp.status === 404) {
+        throw Error(`${locationName} is not a valid area`)
+      }
+      data = (await resp.json()) as Location
+      this.#cache.add<Location>(fullURL, data)
+    }
+    return data
   }
 }
 
