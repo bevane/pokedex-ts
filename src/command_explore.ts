@@ -6,6 +6,7 @@ export async function commandExplore(state: State, name: string) {
     return
   }
   const location = await state.api.fetchLocation(name);
+  console.log(`Exploring ${name}...`)
   console.log("Found Pokemon:")
 
   for (const encounter of location.pokemon_encounters) {
